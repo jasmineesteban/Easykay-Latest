@@ -32,10 +32,14 @@ Ensure you have the following installed on your system:
 - **Composer** (for PHP dependencies)
 - **Git** (for version control)
 - **Open Street Map API key** (for map integration)
+- **Facebook and Google Authentication libraries** (included via Composer)
 
 ### **Steps to Install**
 
 1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/jasmineesteban/Easykay-Latest.git
+3. 
   
 
 
