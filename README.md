@@ -48,10 +48,21 @@ Ensure you have the following installed on your system:
 
 ### Database Setup
 1. **Create a MySQL database:**
-- Open phpMyAdmin by navigating to http://localhost/phpmyadmin in your browser.
-- Create a new database with the name: transport_commuting_guide.
+- Open **phpMyAdmin** by navigating to `http://localhost/phpmyadmin` in your browser.
+- Create a new database with the name: `easykay`.
 2. **Import the database schema:**
-- Click on the Import tab in phpMyAdmin.
+- Click on the **Import**t tab in phpMyAdmin.
+- Choose the `easykay-5.sql` file located in the project’s folder.
+- Click **Go** to import the database structure and data.
+
+### User Account Information
+**Default Admin Account (Tourism Department):**
+- Username: admin
+- Password: admin123
+**User Authentication:**
+- **Login Options:**
+  - Facebook Login
+  - Google Login
 
 
 
