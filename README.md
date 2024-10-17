@@ -1,4 +1,4 @@
-# Transport Commuting Guide System
+# EasyKay: A Transport Commuting Guide System
 
 ## Overview
 **EasyKay** is a web-based application that helps commuters navigate the most efficient routes and transportation options available within Santa Maria.
