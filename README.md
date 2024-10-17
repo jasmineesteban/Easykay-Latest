@@ -59,6 +59,7 @@ Ensure you have the following installed on your system:
 **Default Admin Account (Tourism Department):**
    - Username: admin
    - Password: admin123
+
 **User Authentication:**
    - **Login Options:**
      - Facebook Login
