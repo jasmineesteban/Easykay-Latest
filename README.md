@@ -51,7 +51,7 @@ Ensure you have the following installed on your system:
 - Open **phpMyAdmin** by navigating to `http://localhost/phpmyadmin` in your browser.
 - Create a new database with the name: `easykay`.
 2. **Import the database schema:**
-- Click on the **Import**t tab in phpMyAdmin.
+- Click on the **Import** tab in phpMyAdmin.
 - Choose the `easykay-5.sql` file located in the project’s folder.
 - Click **Go** to import the database structure and data.
 
