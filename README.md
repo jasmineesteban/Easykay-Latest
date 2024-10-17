@@ -39,7 +39,23 @@ Ensure you have the following installed on your system:
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/jasmineesteban/Easykay-Latest.git
-3. 
+2. **Navigate to the project directory:**
+   ```bash
+   cd Easykay-Latest
+3. **Install PHP dependencies using Composer:**
+   ```bash
+   composer install
+
+### Database Setup
+1. **Create a MySQL database:**
+- Open phpMyAdmin by navigating to http://localhost/phpmyadmin in your browser.
+- Create a new database with the name: transport_commuting_guide.
+2. **Import the database schema:**
+- Click on the Import tab in phpMyAdmin.
+
+
+
+
   
 
 
