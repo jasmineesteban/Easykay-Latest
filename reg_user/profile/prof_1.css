@@ -1,0 +1,23 @@
+@import "../../css/navigat.css";
+
+.user-profile{
+    margin: 10% 3%;
+    background-color: #fdfdfd;
+}
+.fa-user.icon{
+    font-size: 40px;
+    color: #20A2AA;
+    border: 1px solid #20A2AA;
+    padding: 10px 14px;
+    border-radius: 100%;
+}
+
+.horizontal-line {
+    display: flex;
+    align-items: center;
+    margin: 0 0 32px 0;
+}
+.line {
+    flex: 1;
+    border-top: .5px solid rgba(51, 51, 51, 0.5);
+}

@@ -1,0 +1,74 @@
+@import "ad_side_2.css";
+
+.ad-profile{
+    margin: 10% 5% 8% 8%;
+}
+
+.ad-profile{
+    background-color: #fdfdfd;
+    
+}
+
+.side-active{
+    background-color: #20A2AA;
+}
+
+.fa-user.icon{
+    font-size: 40px;
+    color: #20A2AA;
+    border: 1px solid #20A2AA;
+    padding: 10px 14px;
+    border-radius: 100%;
+}
+.details, .buttons{
+    width: 60%;
+}
+.btn{
+    border: 1px solid #20A2AA;
+    font-size: 14px;
+}
+.btn:hover{
+    background-color: #002628;
+    border-color: #002628;
+    color: #fdfdfd;
+}
+
+.horizontal-line {
+    display: flex;
+    align-items: center;
+    margin: 0 0 32px 0;
+}
+.line {
+    flex: 1;
+    border-top: .5px solid rgba(51, 51, 51, 0.5);
+}
+.modal-body input{
+
+    border: 1px solid #20A2AA;
+
+}
+
+.required-asterisk {
+    color: red;
+    margin-left: 3px; 
+}
+.btn.btn-primary{
+    height: 36px;
+    border: none;
+    width: 100%;
+    border-radius: 20px;
+    color: #FDFDFD;
+    background-color: #20A2AA;
+}
+.btn.btn-primary:hover{
+    background-color: #002628;
+}
+.admin-btn{
+    font-size: 14px;
+    text-decoration: underline;
+    color: #002628;
+}
+
+.admin-btn:hover{
+    color: #20A2AA;
+}

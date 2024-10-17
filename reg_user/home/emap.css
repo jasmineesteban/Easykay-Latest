@@ -1,0 +1,196 @@
+@import "../../css/navig.css";
+body{
+    overflow: hidden;
+    
+}
+#map{
+    height: 100vh;
+    width: 100%;
+}
+/* map design */
+.leaflet-control-zoom{
+    background-color: transparent; 
+    border: none !important; 
+    border-radius: 5px; 
+    
+}
+.leaflet-control-zoom a{
+    background-color: #002628; 
+    color: #fdfdfd; 
+    border: none; 
+    border-radius: 3px; 
+    font-size: 14px; 
+    margin: 6px 0;
+    box-shadow: 0 2px 4px rgba(0, 38, 40, 0.5);
+}
+.leaflet-control-zoom a:hover {
+    background-color: #20A2AA;
+    color: #fdfdfd;
+}
+ /* searchbar */
+.leaflet-control-geocoder {
+    display: flex;
+    align-items: center;
+    background-color: #fdfdfd; 
+    border: 1px solid #20A2AA !important; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 38, 40, 0.3) !important;
+    padding: 4px 20px; 
+    margin-top: 10px !important; 
+    font-size: 14px;
+    max-width: 400px !important;
+    margin: 0 auto; /* Center the search bar */
+}
+/* Custom styles for the geocoder input */
+.leaflet-control-geocoder-form input {   
+    width: 100%; 
+    padding: 8px 0; 
+}
+/* Customize the search icon */
+.leaflet-control-geocoder-icon {
+    background-image: none; 
+    background-color: transparent;
+    padding: 0;
+}
+.leaflet-control-geocoder-icon-container {
+    order: -1;
+    font-size: 18px;
+    margin-right: -10px;
+}
+
+.leaflet-routing-container {
+    background-color: #fdfdfd;
+    border: 1px solid #20A2AA !important;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 38, 40, 0.3) !important;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.leaflet-routing-container input {
+    width: 100%;
+    margin-bottom: 5px;
+}
+.leaflet-bottom.leaflet-left .leaflet-routing-container {
+    margin-bottom: 40px; 
+    margin-left: 10px;
+}
+
+.leaflet-control-custom{
+    background-color: transparent; 
+    border: none !important;
+    background-color: #fdfdfd;
+    
+}
+.leaflet-control-custom button{
+    box-shadow: 0 2px 4px rgba(0, 38, 40, 0.5);
+    width: 32px; 
+    height: 32px; 
+    padding: 0; 
+    background-color: #002628;
+}
+.location-icon{
+    font-size: 16px;
+    color: #fdfdfd;
+}
+.leaflet-control-custom button:hover{
+    background-color: #20A2AA;
+    color: #fdfdfd;
+}
+#toggleLocationBtn:disabled {
+    background-color: #F8F8F8;
+    color: #999; 
+    cursor: not-allowed;
+    border: none !important;
+}
+@media (max-width: 767px) {
+
+    .leaflet-control-zoom {
+        display: none;
+    }
+
+    .offcanvas {
+        width: 85vw !important;
+    }
+}
+
+.btn-secondary.burger-btn, .btn.btn-primary{
+    background-color: #002628 !important; 
+    border: none;
+    color: #fdfdfd;
+    box-shadow: 0 2px 4px rgba(0, 38, 40, 0.5);
+
+}
+.btn-secondary.burger-btn:hover, .btn.btn-primary:hover{
+    background-color: #20A2AA !important;
+    border: none;
+}
+
+
+.btn-active{
+    border: 1px solid #20A2AA;
+    color: #20A2AA !important;
+    border-radius: 8px;
+}
+.dropdown-item{
+    color: #002628 !important;
+}
+.dropdown-item:hover{
+    background-color: #20A2AA;
+    color: #fdfdfd !important;
+    border-radius: 8px;
+}
+.side-panel {
+    border: none;
+    background-color: #fdfdfd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;   
+    position: relative;
+    z-index: 2000;
+}
+.sidepanel-header{
+    background-color: #002628;
+}
+.col-7 {
+    display: flex;
+    align-items: center;
+}
+
+.col-7 a {
+    color: #20A2AA;
+    font-weight: 600;
+    margin: 0; 
+    font-size: 24px ;
+}
+
+.btn.btn-outline-primary.go{
+    background-color: transparent;
+    border: 1px solid #20A2AA;
+    color:#20A2AA;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 4px 16px;
+}
+.btn.btn-outline-primary.go:hover{
+    background-color: #20A2AA;
+    color: #fdfdfd;
+}
+
+.button{
+    font-size: 14px;
+    border: 1px solid #8ccccf;
+    background-color: transparent;
+}
+.input-group-num input{
+    border: 1px solid #8ccccf !important;
+    border-right: none;
+    text-align: center;
+    font-size: 14px;
+
+}
+.fa-solid.fa-xmark{
+    color:#20A2AA !important;
+}
+

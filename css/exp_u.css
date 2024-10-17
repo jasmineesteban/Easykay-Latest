@@ -1,0 +1,110 @@
+@import "navigat.css";
+
+.explore-row{
+    margin: 7% 1%;
+}
+
+.search{
+    height: auto;
+}
+#search i:hover{
+    color: #002628;
+}
+.input-group{
+    height: 36px;
+    width: 100%;
+    margin: auto 0;
+}
+.form-control{
+    font-size: 16px;
+    border: 1px solid #20A2AA;
+    border-radius: 20px;
+    border-right: none; 
+    background-color: #FDFDFD;
+    padding: 0 20px;
+}
+.input-group-text{
+    background-color: #FDFDFD;
+    border-radius: 0 20px 20px;
+    border-color: #20A2AA;
+    color: #20A2AA;
+    font-size: 20px;
+    padding: 0 20px;
+    border-left: none;
+}
+.form-control:focus{
+    box-shadow: none;
+    border: 1px solid #002628;
+}
+
+.item{
+    width: 100%;
+    height: 300px;
+    margin: 16px 0;
+    background-color: #FDFDFD;
+    position: relative;
+}
+.explore-img{
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+.img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.title{
+    font-size: 20px;
+    font-weight: 600;
+}
+.btn.btn-primary.show{
+    background-color: #20A2AA;
+    border-radius: 8px;
+    border: none;
+    width: 50%;
+    font-size: 14px;
+}
+.show-route{
+    background-color: #20A2AA;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+}
+
+.btn.btn-primary:hover{
+    background-color: #002628;
+}
+.view-more{
+    font-size: 14px;
+
+}
+.view-more:hover{
+    text-decoration: underline;
+    color: #20A2AA;
+}
+
+@media (max-width: 767px){
+
+    .explore-row{
+        margin: 20% 1%;
+    }
+
+    .item{
+        height: 60%;
+    }
+    .btn.btn-primary.show{
+
+        width: 100%;
+
+    }
+
+}
+@media (min-width: 768px) and (max-width: 991px){
+    .explore-row{
+        margin: 12% 1%;
+    }
+
+   
+}

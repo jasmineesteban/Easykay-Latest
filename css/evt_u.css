@@ -1,0 +1,99 @@
+@import "navigat.css";
+
+.row-event{
+    margin: 6% 0;
+}
+.selected-event-img{
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+.selected-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.selected, .list{
+    padding: 1% 4%;
+}
+
+.btn.btn-primary{
+    height: 36px;
+    border: none;
+    width:100%;
+    border-radius: 20px;
+    color: #FDFDFD;
+    background-color: #20A2AA;
+}
+.event-img{
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+}
+.img{
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    border-radius: 4px;
+}
+.event-title{
+    width: 100%;
+    font-weight: 600; 
+    text-align: left;
+}
+.event-title:hover{
+    color: #20A2AA;
+    text-decoration: underline;
+}
+
+.btn-event{
+    border: none;
+    background-color: transparent;
+}
+
+.row-prev{
+    width: 75%;
+}
+
+
+@media (max-width: 767px){
+
+    .row-event{
+        margin: 20% 0;
+    }
+    .row-prev{
+        width: 100%;
+    }
+    .selected-event-img{
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .event-img{
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
+    }
+
+}
+@media (min-width: 768px) and (max-width: 991px){
+    .row-event{
+        margin: 10% 0;
+    }
+    .row-prev{
+        width: 100%;
+    }
+    .selected-event-img{
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .event-img{
+        width: 100%;
+        height: 150px;
+        overflow: hidden;
+    }
+}

@@ -1,0 +1,66 @@
+.frm-event-details{
+    width: 100%;
+    height: auto;
+    color: #333;
+    background-color: #FDFDFD;
+    margin: -20px 0;
+    padding: 20px;
+}
+.required-asterisk {
+    color: red;
+    margin-left: 3px; 
+}
+
+.form-group{
+    margin: 4px 0;
+}
+.col-sm-12 .form-control, .col-sm-8 .form-control{
+    border-color: #20A2AA;
+    color: #333;
+    padding:5px 5px;
+    font-size: 16px;
+}
+.form-control:focus{
+    box-shadow: none;
+    border: 1px solid #002628;
+}
+.form-button{
+    display: flex;
+    gap: 10px; /* Adjust the gap as needed */ /* Adjust the margin as needed */
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 10px;
+}
+
+.col-sm-4 input{
+    width: 150px;
+    margin-top: 20px;
+    height: 36px;
+    text-align: center;
+    border: none;
+    border-radius: 20px;
+    border: 1px solid #20A2AA;
+}
+
+@media (max-width: 767px){
+    .form-button{
+        justify-content: space-around;
+        
+    }
+    .col-sm-4 input{
+        width: 130px;
+        
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px){
+    .form-button{
+        justify-content: flex-end;
+        gap: 70px;
+        margin-right: 50px;
+    }
+    .col-sm-4 input{
+        width: 140px;
+        
+    }
+}

@@ -1,0 +1,69 @@
+@import "css/navig.css";
+
+img.logo{
+    border-radius: 8px;
+    width: 20%;
+}
+.horizontal-line {
+    display: flex;
+    align-items: center;
+    margin: 16px 0;
+}
+.line {
+    flex: 1;
+    border-top: 2px solid #002628; 
+}
+.or-text {
+    margin: 0 8px;
+    color: #333;
+}
+.btn.btn-login{
+    width: 100%;
+    margin: 8px 0;
+    font-size: 16px;
+}
+#btn-email{
+    background-color: #DB4437;
+    color: #fdfdfd;
+}
+#btn-fb{
+    background-color: #3c5898;
+    color: #fdfdfd;
+}
+#btn-guest{
+    color: #20A2AA;
+    border: 1px solid #20A2AA;
+}
+
+.icon{
+    margin-right: 16px;
+}
+#btn-email:hover, #btn-fb:hover, #btn-guest:hover{
+    background-color:#002628;
+    color: #fdfdfd;
+    border-color:#002628;
+}
+
+.admin-btn{
+    font-size: 14px;
+    text-decoration: underline;
+    color: #002628;
+}
+
+.admin-btn:hover{
+    color: #20A2AA;
+}
+.btn.btn-primary.admin{
+    background-color: #20A2AA !important;
+    border: none;
+}
+.form-control.btn.btn-primary:hover{
+    background-color: #002628;
+}
+.form-control{
+    border: 1px solid #20A2AA;
+}
+.success-message{
+    background-color: #c36161;
+    color: #f1ebeb;
+}

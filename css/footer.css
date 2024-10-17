@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Hind&family=Montserrat:wght@700&display=swap");
+
+.foot {
+    margin-top: 80px;
+    text-align: center;
+}
+
+a {
+    color: gray;
+    text-decoration: none;
+}
+
+.footer__redes-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin: 45px auto;
+}
+
+.footer__redes-wrapper li {
+    transition: all ease 0.3s;
+    display: inline-block;
+}
+
+.footer__redes-wrapper li:hover {
+    color: hsl(0, 0%, 44%);
+}
+
+.footer__link {
+    text-transform: uppercase;
+    font-family: "Montserrat", sans-serif;
+    font-size: 20px; /* Adjusted to a specific size */
+}
+
+.fab {
+    margin-right: 8px;
+}
+
+.footer__texto {
+    color: hsl(0, 0%, 63%);
+    text-align: center;
+}
+
+.separador {
+    background-color: hsl(0, 0%, 88%);
+    height: 2px;
+    max-width: 30px;
+    margin: 15px auto 20px;
+    text-align: center;
+    position: absolute center;
+}
+
+@media only screen and (min-width: 320px) {
+
+  .foot {
+      margin-top: 80px;
+      text-align: center;
+  }
+
+  a {
+      color: gray;
+      text-decoration: none;
+  }
+
+  .footer__redes-wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      max-width: 600px;
+      margin: 45px auto;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .footer__redes {
+      flex-direction: column; /* Stack social media links vertically on smaller screens */
+    }
+  }
+  .footer__redes-wrapper li {
+      transition: all ease 0.3s;
+      display: inline-block;
+  }
+
+  .footer__redes-wrapper li:hover {
+      color: hsl(0, 0%, 44%);
+  }
+
+  .footer__link {
+      text-transform: uppercase;
+      font-family: "Montserrat", sans-serif;
+      font-size: 20px; /* Adjusted to a specific size */
+      position: center;
+  }
+
+  .fab {
+      margin-right: 8px;
+  }
+
+  .footer__texto {
+      color: hsl(0, 0%, 63%);
+
+  }
+
+  .separador {
+      background-color: hsl(0, 0%, 88%);
+      height: 2px;
+      max-width: 30px;
+      margin: 15px auto 20px;
+      text-align: center;
+  }
+}

@@ -1,0 +1,43 @@
+*{
+  font-family: 'Poppins', sans-serif;
+}
+
+body{
+  background-color: #f5f5f5;
+  border: none;
+}
+
+.container-fluid {
+  background-color: #066873;
+  padding: 75px 0;
+  font-size: 20px;
+}
+
+.container-fluid h2{
+  font-weight: 600;
+  font-size: 40px;
+  color: whitesmoke;
+  padding-bottom: 25px;
+}
+
+.container-fluid p{
+  font-weight: 600;
+  font-size: 20px;
+  color: whitesmoke;
+  margin-bottom: 25px;
+}
+
+@media only screen and (max-width: 320px) {
+  .container-fluid {
+    font-size: 16px; /* Adjust font size for smaller screens */
+    padding: 50px 0; /* Adjust padding for smaller screens */
+  }
+
+  .container-fluid h2 {
+    font-size: 30px; /* Adjust heading font size for smaller screens */
+  }
+
+  .container-fluid p {
+    font-size: 16px; /* Adjust paragraph font size for smaller screens */
+  }
+}

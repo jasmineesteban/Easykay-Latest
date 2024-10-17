@@ -1,0 +1,233 @@
+@import "css/navbar.css";
+/*----------- landing container---------------*/
+.landing{
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+.content{
+    margin: auto 250px;
+}
+
+.quotes{
+    padding: 20px 0;
+    font-size: 20px;
+}
+.quotes .sentence-1{
+    font-weight: 600;
+    font-size: 32px;
+    color: #fff;
+}
+.sentence-2{
+    font-weight: normal;
+    font-size: 20px;
+    color: #fff;
+}
+.search{
+    margin: 20px 0;
+    font-size: 16px;
+}
+.form-control{
+    padding: 15px 15px;
+    border: 1px solid #20A2AA;
+    border-radius: 10px;
+    border-right: none; 
+    background-color: #FDFDFD;
+}
+.input-group-text{
+    background-color: #FDFDFD;
+    border-radius: 10px;
+    border-color: #20A2AA;
+    color: #20A2AA;
+    font-size: 20px;
+    padding: 0 25px;
+    border-left: none;
+    font-size: 30px;
+}
+.form-control:focus{
+    background-color: #FDFDFD;
+    box-shadow: none;
+    border: 1px solid #002628;
+}
+.fa-solid:hover{
+    color:#002628
+}
+.btn{
+    width: 100%;
+    margin: 0;
+}
+.btn-log{
+    width: 80%;
+    max-width: 500px;
+    padding: 5px 0;
+    border: none;
+    background-color: #1778f2;
+    border-radius: 10px;
+    color: #FDFDFD;
+    font-size: 20px;
+}
+.events  {
+    height: 100vh;
+    background-color: #ECF2F2;
+}
+
+#bkgcityhall{
+    background-image: linear-gradient(to top, #005b60ba, #005b60cc), url(images/cityhall.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.img-terminal{
+    background-image: linear-gradient(to top, #ffffff99, #ffffffcc), url(images/terminal.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    margin-top: 0 auto;
+    
+}
+
+.green-opaque{
+    background-color: #000d0e;
+    opacity: 0.10;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-style1{
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+    margin: 0px auto;
+}
+.add-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 20px;
+    width: 40%;
+    text-align: left;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: all .3s ease-out;
+  }
+.accordion:after {
+    content: '\02795'; /* Unicode character for "plus" sign (+) */
+    font-size: 13px;
+    color: white;
+    float: right;
+    margin-left: 5px;
+}
+
+.active:after {
+    content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+.active, .accordion:hover {
+    background-color: white; 
+}
+.panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+    color:#005b60;
+    transition: max-height 0.5s ease-out;
+  }
+
+@media (max-width: 767px){
+    .logo{
+        margin: 10px 0;
+        width: 90px;
+        height: 90px;
+    }
+    .content{
+        margin: 0;
+    }
+    .quotes{
+        margin: 10px 0;
+        font-size: 16px;
+    }
+    .events .quotes {
+        margin: 0;
+    }
+}
+@media (min-width: 768px) and (max-width: 991px){
+    .content{
+        margin: auto 40px;
+    }
+    .logo{
+        margin: 20px 0;
+    }
+}
+
+
+img.logo{
+    border-radius: 8px;
+    width: 20%;
+}
+.horizontal-line {
+    display: flex;
+    align-items: center;
+    margin: 16px 0;
+}
+.line {
+    flex: 1;
+    border-top: 2px solid #002628; 
+}
+.or-text {
+    margin: 0 8px;
+    color: #333;
+}
+.btn.btn-login{
+    width: 100%;
+    margin: 8px 0;
+    font-size: 16px;
+}
+#btn-email{
+    background-color: #DB4437;
+    color: #fdfdfd;
+}
+#btn-fb{
+    background-color: #3c5898;
+    color: #fdfdfd;
+}
+#btn-guest{
+    color: #20A2AA;
+    border: 1px solid #20A2AA;
+}
+
+.icon{
+    margin-right: 16px;
+}
+#btn-email:hover, #btn-fb:hover, #btn-guest:hover{
+    background-color:#002628;
+    color: #fdfdfd;
+    border-color:#002628;
+}
+
+.admin-btn{
+    font-size: 14px;
+    text-decoration: underline;
+    color: #002628;
+}

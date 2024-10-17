@@ -1,0 +1,19 @@
+@import "ad_side_2.css";
+.home{
+    margin: 7% 5% 7% 8%;
+}
+
+.title{
+    color: #002628;
+    font-weight: 600;
+}
+
+.horizontal-line {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 ;
+}
+.line {
+    flex: 1;
+    border-top: 3px solid rgba(51, 51, 51, 0.5);
+}

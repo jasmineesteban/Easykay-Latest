@@ -1,0 +1,62 @@
+@import "../ad_side_2.css";
+
+.faqs{
+    margin: 7% 5% 7% 8%;
+}
+.btn.btn-primary{
+    height: 36px;
+    border: none;
+    width: 100%;
+    border-radius: 20px;
+    color: #FDFDFD;
+    background-color: #20A2AA;
+}
+.btn.btn-primary:hover{
+    background-color: #002628;
+}
+.title-faqs{
+    color: #002628;
+    font-weight: 600;
+}
+.arc, .arc-text{
+    color: #585757;
+    font-size: 16px;
+    
+}
+.arc-text:hover{
+   color: #20A2AA;  
+   text-decoration: underline;
+}
+.horizontal-line {
+    display: flex;
+    align-items: center;
+    margin: 10px 0 ;
+}
+.line {
+    flex: 1;
+    border-top: 3px solid rgba(51, 51, 51, 0.5);
+}
+.required-asterisk {
+    color: red;
+    margin-left: 3px; 
+}
+.success-message{
+    background-color: #61c361;
+    color: #e9fce9;
+}
+.form-control:focus{
+    box-shadow: none;
+    border: 1px solid #002628;
+}
+.input-group{
+    height: 36px;
+    max-width: 540px;
+    width: 100%;
+
+}
+.form-control{
+    font-size: 16px;
+    border: 1px solid #20A2AA;
+    background-color: #FDFDFD;
+}
+
