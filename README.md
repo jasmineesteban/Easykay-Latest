@@ -57,7 +57,7 @@ Ensure you have the following installed on your system:
 
 ### User Account Information
 **Default Admin Account (Tourism Department):**
-   - Username: admin
+   - Username: Admin
    - Password: admin123
 
 **User Authentication:**
