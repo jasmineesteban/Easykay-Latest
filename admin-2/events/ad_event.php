@@ -79,11 +79,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/99c24c4877.js" crossorigin="anonymous"></script>
-    
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
     <script src="../ad_sidebar.js"></script>
 
@@ -287,20 +282,19 @@
                                 <input type="text" class="form-control" id="evt_location" name="evt_location" required>
                                 <div class="invalid-feedback">Please fill up this field.</div>
                             </div>
-                            <br>
-                            <div id="mapAddEvent" style="width: 100%; height: 50vh; margin: auto; border: 1px solid #20a2aa; border-radius: 10px; overflow: hidden;"></div>
+                    
                             <div class="d-flex justify-content-between flex-column mt-2">
                                 <div class="form-group row col-sm-12 my-2">
                                     <label for="latitude" class="col-sm-4 col-form-label">Latitude <span class="required-asterisk">*</span></label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="latitude" name="latitude" required readonly>
+                                        <input type="text" class="form-control" id="latitude" name="latitude" required pattern="[0-9]+(\.[0-9]+)?">
                                         <div class="invalid-feedback">Please enter a valid latitude.</div>
                                     </div> 
                                 </div>
                                 <div class="form-group row col-sm-12 my-2">
                                     <label for="longitude" class="col-sm-4 col-form-label">Longitude<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="longitude" name="longitude" required readonly>
+                                        <input type="text" class="form-control" id="longitude" name="longitude" required pattern="[0-9]+(\.[0-9]+)?">
                                         <div class="invalid-feedback">Please enter a valid longitude.</div>
                                     </div> 
                                 </div>
@@ -392,20 +386,19 @@
                                 <input type="text" class="form-control" id="evt_location" name="evt_location" value="<?php echo $rowData['3']?>" required>
                                 <div class="invalid-feedback">Please fill up this field.</div>
                             </div>
-                            <br>
-                            <div id="mapEditEvent" style="width: 600px; height: 400px; margin: auto; border: 1px solid #20a2aa; border-radius: 10px; overflow: hidden;"></div>
+                    
                             <div class="d-flex justify-content-between flex-column mt-2">
                                 <div class="form-group row col-sm-12 my-2">
                                     <label for="latitude" class="col-sm-4 col-form-label">Latitude <span class="required-asterisk">*</span></label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="latitude" name="latitude" value="<?php echo $rowData['7']?>" required readonly>
+                                        <input type="text" class="form-control" id="latitude" name="latitude" value="<?php echo $rowData['7']?>" required pattern="[0-9]+(\.[0-9]+)?">
                                         <div class="invalid-feedback">Please enter a valid latitude.</div>
                                     </div> 
                                 </div>
                                 <div class="form-group row col-sm-12 my-2">
                                     <label for="longitude" class="col-sm-4 col-form-label">Longitude<span class="required-asterisk">*</span></label>
                                     <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="longitude" name="longitude" value="<?php echo $rowData['8']?>" required pattern="[0-9]+(\.[0-9]+)?">
+                                        <input type="text" class="form-control" id="longitude" name="longitude" value="<?php echo $rowData['8']?>" required pattern="[0-9]+(\.[0-9]+)?">
                                         <div class="invalid-feedback">Please enter a valid longitude.</div>
                                     </div> 
                                 </div>
@@ -472,7 +465,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addExploreLabel">Archive Event</h1>
+                    <h1 class="modal-title fs-5" id="addExploreLabel">Archive FAQs</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> 
                 <form action="" method="POST">
@@ -513,7 +506,7 @@
         </div>
     </div>
         
-     <!-- LIST OF EVENTS ARCVIVES MODAL -->
+     <!-- LIST OF FAQS ARCVIVES MODAL -->
 
      <div class="modal fade" id="Archives" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="ArchivesLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -562,49 +555,7 @@
         </div>
     </div>
 
-    <script>
-    // Function to initialize a map and geocoder for an event form
-    function initializeMapAndGeocoder(mapContainerId, latitudeInputId, longitudeInputId) {
-        var map = L.map(mapContainerId).setView([14.8064, 120.9614], 13);
-        
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-
-
-        var marker = L.marker([14.8064, 120.9614], {
-            draggable: true,
-            iconAnchor: [16, 37]
-        }).addTo(map);
-
-    // Update latitude and longitude input fields when marker is dragged
-    marker.on('drag', function (event) {
-        var markerLatLng = marker.getLatLng();
-        document.getElementById('latitude').value = markerLatLng.lat.toFixed(6);
-        document.getElementById('longitude').value = markerLatLng.lng.toFixed(6);
-    });
-
-        var geocoder = L.Control.geocoder({
-            defaultMarkGeocode: false
-        }).on('markgeocode', function(e) {
-            var latlng = e.geocode.center;
-            map.setView(latlng, 13);
-        }).addTo(map);
-
-        geocoder.on('markgeocode', function (event) {
-        var location = event.geocode.center;
-        map.setView(location, 13); // Set the map view to the searched location
-        marker.setLatLng(location); // Move the marker to the searched location
-        document.getElementById('latitude').value = location.lat.toFixed(6);
-        document.getElementById('longitude').value = location.lng.toFixed(6);
-        });
-    }
-
-    // Initialize maps and geocoders for each form
-    initializeMapAndGeocoder('mapAddEvent', 'latitudeAddEvent', 'longitudeAddEvent');
-    initializeMapAndGeocoder('mapEditEvent', 'latitudeEditEvent', 'longitudeEditEvent');
-</script>
-
+    
 </body>
 </html>
 <?php

@@ -2,6 +2,7 @@
 
 include "../../connection.php";
 
+
 if (isset($_POST['selectedValue'])) {
     $selectedTodaId = $_POST['selectedValue'];
 
@@ -21,7 +22,7 @@ if (isset($_POST['selectedValue'])) {
         echo '</button>';
         echo '</div>';
         echo '<div class="col-2 text-center">';
-        echo '<button type="button" class="btn" id="sub-btn" data-bs-toggle="modal" data-bs-target="#archiveTodaFare">';
+        echo '<button class="btn" id="sub-btn" data-bs-toggle="modal" data-bs-target="#archiveTodaFare">';
         echo '<i class="fa-solid fa-box-archive arc mx-2"></i></i><span class="text"> Archive Toda</span>';
         echo '</button>';
         echo '</div>';
@@ -41,41 +42,37 @@ if (isset($_POST['selectedValue'])) {
         $routes_query = "SELECT * FROM tb_toda_fare WHERE toda_id = '$selectedTodaId'";
         $routes_result = mysqli_query($conn, $routes_query);
 
-        echo '<div class="">';
-        echo '<div class="col-lg-12">';
-        echo '<div class="m-5 py-2">';
-        echo '<div class="row row-fare" style="margin-top: -30px">';
-        echo '<div class="col-3 text-center">';
+        echo '<div class="container">';
+        echo '<div class="col-lg-12 mx-auto ">';
+        echo '<div class="fares">';
+        echo '<div class="row row-fare mx-auto p-2" style="margin-top: -30px">';
+        echo '<div class="col-4 text-center">';
         echo '<span><b>Route</b> </span>';
         echo '</div>';
-        echo '<div class="col-3 text-center">';
+        echo '<div class="col-4 text-center">';
         echo '<span><b>1 Passenger Fare</b> </span>';
         echo '</div>';
-        echo '<div class="col-3 text-center">';
+        echo '<div class="col-4 text-center">';
         echo '<span><b>2 Passengers Fare</b> </span>';
         echo '</div>';
         echo '</div>';
 
 
     while ($routeRow = mysqli_fetch_assoc($routes_result)) {
-        echo '<div class="row row-fare my-2 py-2 shadow-sm">';
-        echo '<div class="col-3 text-center my-auto">';
+        echo '<div class="row row-fare mx-auto my-2 p-2 shadow-sm">';
+        echo '<div class="col-4 text-center">';
         echo '<span>' . $routeRow['toda_route'] . '</span>';
         echo '</div>';
-        echo '<div class="col-3 text-center my-auto">';
+        echo '<div class="col-4 text-center">';
         echo '<span>' . $routeRow['toda_one_pass'] . '</span>';
         echo '</div>';
-        echo '<div class="col-3 text-center my-auto">';
+        echo '<div class="col-4 text-center">';
         echo '<span>' . $routeRow['toda_two_pass'] . '</span>';
-        echo '</div> ';
-        echo '<div class="col-3 text-center">';
-        echo '<form method="POST">
-                <input type="hidden" class="form-control" id="updateFare" name="updateFare" '. $routeRow['toda_fare_id'] .' required>
-                <button type="submit" class="btn btn-light fs-6" name="update-fare"><span class="fw-light text-muted">Update</span></button>
-                </form>';
         echo '</div> ';
         echo '</div> ';
     }
+
+
         echo '</div>';
         echo '</div></div>';
     } else {
@@ -150,8 +147,6 @@ if (isset($_POST['add-route'])) {
         echo '<script>';
         echo 'document.getElementById("editToda").value = "' . $row['toda_name'] . '";';
         echo 'document.getElementById("editTodaTerminal").value = "' . $row['toda_terminal'] . '";';
-        echo 'document.getElementById("latitudeEditEvent").value = "' . $row['toda_latitude'] . '";';
-        echo 'document.getElementById("longitudeEditEvent").value = "' . $row['toda_longitude'] . '";';
         echo '</script>';
     }
 
@@ -168,18 +163,8 @@ if (isset($_POST['add-route'])) {
         echo 'document.getElementById("editPassenger2").value = "' . $fare_row['toda_two_pass'] . '";';
         echo '</script>';
     }
-
-    $toda_query = "SELECT * FROM `tb_tricycle_toda` WHERE `toda_id` = '$selectedTodaId'";
-    $toda_result = mysqli_query($conn, $toda_query);
-
-    if ($toda_row = mysqli_fetch_assoc($toda_result)) {
-        
-        // Populate input fields in the add route modal form with fare details
-        echo '<script>';
-        echo 'document.getElementById("archive-name").textContent = "'. $toda_row['toda_name'] .'";';
-        echo '</script>';
-    }
     
+
 ?>
 
 

@@ -50,7 +50,7 @@ document.getElementById('jeepTerminalBtn').addEventListener('click', function ()
                 console.error('Error fetching jeepney terminal location:', error);
             }
         });
-        document.getElementById('jeepTerminalBtn').style.backgroundColor = '#20A2AA';
+        document.getElementById('jeepTerminalBtn').style.backgroundColor = 'blue';
     }
 });
     

@@ -5,7 +5,6 @@
     include "../activity_log.php";
     include "../../login/idset.php";
     include "toda_process.php";
-    include "archive_function.php";
 
     if (isset($_SESSION['todaId'])) {
         $toda_id = $_SESSION['todaId'];
@@ -57,34 +56,6 @@
 
         return $toda_id;
     }
-
-    if(isset($_POST['edit-toda'])){
-        $editId = $_POST['editselectedTodaId'];
-        $todaName =  $_POST['editToda'];
-        $todaTerminal =  $_POST['editTodaTerminal'];
-        $todaLat =  $_POST['latitude'];
-        $todaLong =  $_POST['longitude'];
-        $query = "UPDATE `tb_tricycle_toda` SET `toda_name`='$todaName', `toda_terminal`='$todaTerminal', `toda_latitude`='$todaLat', `toda_longitude`='$todaLong' WHERE `toda_id` = '$editId'";
-        $result = mysqli_query($conn, $query);
-
-    }
-
-    if(isset($_POST['update-fare'])){
-        $updateId = $_POST['updateFare'];
-        
-        if ($updateId != null) {
-            $query = "SELECT * FROM `tb_toda_fare` WHERE `toda_fare_id` = '$updateId'";
-            $fare = mysqli_query($conn, $query);
-            $row = mysqli_fetch_row($fare);
-            $rowDataFare = array();
-
-            if ($row) {
-                $rowDataFare = $row;
-            }
-            $_SESSION['update_fare_modal'] = true;
-        }
-    }
-
 ?>
 
 <!DOCTYPE html>
@@ -105,11 +76,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/99c24c4877.js" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
     <script src="../ad_sidebar.js"></script>
 
     <link rel="stylesheet" type="text/css" href="tricyy.css">
@@ -118,7 +84,106 @@
 </head>
 <body>
     <div class="wrapper">
+        <div class="top_navbar">
+            <div class="hamburger mx-3">
+                <div class="nav-icon d-flex justify-content-center"><img class="" src="../../images/logo.png" alt=""></div>
+            </div>
+            <div class="menu">
+                <div class="logo">
+                    EasyKay
+                </div>
+                <div class="right_menu">
+                    <ul>
+                        <li><i class="fas fa-user"></i>
+                        <div class="profile_dd">
+                            <div class="dd_item"> 
+                                <a class="nav-link" href="../ad_profile.php">Profile</a>
+                            </div>
+                            <div class="dd_item"> 
+                                <a class="nav-link" href="../../login/logout.php">Logout</a>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
         
+        <div class="main_container">
+            <div class="sidebar">
+                <div class="sidebar__inner">
+                <div class="profile mx-4">
+                        <div class="profile_info">
+                            <p>Welcome</p>
+                            <p class="profile_name fs-5"><b>Administrator</b></p>
+                        </div>
+                    </div>
+                    <ul class="nav nav-pills flex-column mt-2 mt-sm-0" id="menu">
+                        <li class="nav-item my-2">
+                            <a class="nav-link" href="../ad_home.php">
+                                <span class= "icon"><i class="fa-solid fa-house"></i></span>
+                                <span class="title ms-2">Home</span>
+                            </a>
+                        </li>
+                        <li class="nav-item my-2">
+                            <a class="nav-link" href="../events/ad_event.php">
+                                <span class= "icon"><i class="fa-solid fa-calendar"></i></span>
+                                <span class=" title ms-2">Events</span>
+                            </a>
+                        </li>
+                        <li class="nav-item disabled my-2">
+                            <a class="nav-link" href="#exploresidemenu" data-bs-toggle="collapse">
+                                <span class= "icon"><i class="fa-solid fa-map"></i></span>
+                                <span class="title ms-2">Explore  <i class="fa-solid fa-caret-down ms-2"></i></span>
+                            </a>
+                        <ul class="nav collapse ms-4 flex-column" id="exploresidemenu" data-bs-parent="#menu">
+                            <li class="nav-item">
+                                <a href="../explore/resorts.php" class="nav-link">Resorts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../explore/recreational.php" class="nav-link">Recreational Facilities</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../explore/hotel_lodge.php" class="nav-link">Hotel & Lodge</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../explore/natural_manmade.php" class="nav-link">Natural/Man-Made</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../explore/cultural.php" class="nav-link">Cultural/Religious</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../explore/restaurants.php" class="nav-link">Restaurants</a>
+                            </li>
+                        </ul>
+                        </li>
+                        <li class="nav-item my-2">
+                            <a class="nav-link" href="#faressidemenu" data-bs-toggle="collapse">
+                                <span class= "icon"><i class="fa-solid fa-ticket"></i></span>
+                                <span class="title ms-2">Fares</span>
+                                <i class="fa-solid fa-caret-down ms-2"></i>
+                            </a>
+                            <ul class="nav collapse ms-4 flex-column" id="faressidemenu" data-bs-parent="#menu">
+                                <li class="nav-item">
+                                    <a href="jeep.php" class="nav-link">Jeepney</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="bus.php" class="nav-link">Bus</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="tricycle.php" class="nav-link side-active">Tricycle</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item my-2">
+                            <a class="nav-link" href="../faqs/ad_faqs.php">
+                                <span class= "icon"><i class="fa-solid fa-question"></i></span>
+                                <span class="title ms-2">FAQs</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> 
 
         <div class="containter">
             <div class="col-lg-10 float-end">
@@ -174,8 +239,6 @@
                     $('#selectedValueDisplay').html(response);
                     
                     var id = document.getElementById('selectedTodaId').value = selectedValue;
-                    var editid = document.getElementById('editselectedTodaId').value = selectedValue;
-                    var archiveid = document.getElementById('archiveId').value = selectedValue;
                     console.log(id);
                 },
                 error: function(error) {
@@ -206,7 +269,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> 
                 <form action="" method="POST" class="needs-validation" novalidate>
-                    <div class="modal-body px-5 py-2">
+                    <div class="modal-body">
                         <div class="form-group m-2">
                             <label for="todaName" class="col-sm-6 col-form-label">Toda Name <span class="required-asterisk">*</span></label>
                             <div class="col-sm-12">
@@ -221,28 +284,26 @@
                                 <div class="invalid-feedback">Please fill up this field.</div>
                             </div>
                         </div>
-                            <br>
-                            <div id="mapAddEvent" style="width: 100%; height: 400px; margin: auto; border: 1px solid #20a2aa; border-radius: 10px; overflow: hidden;"></div>
-                            <div class="d-flex justify-content-between flex-column mt-2">
-                                <div class="form-group d-flex my-2">
-                                    <label for="latitudeAddEvent" class="col-sm-4 col-form-label">Latitude <span class="required-asterisk">*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="latitudeAddEvent" name="latitude" required readonly>
-                                        <div class="invalid-feedback">Please enter a valid latitude.</div>
-                                    </div>
-                                </div>
-                                <div class="form-group d-flex my-2">
-                                    <label for="longitudeAddEvent" class="col-sm-4 col-form-label">Longitude<span class="required-asterisk">*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="longitudeAddEvent" name="longitude" required readonly>
-                                        <div class="invalid-feedback">Please enter a valid longitude.</div>
-                                    </div>
-                                </div>
+                        
+                        <div class="d-flex form-group m-2 my-3">
+                            <label for="latitude" class="col-sm-4 col-form-label">Latitude<span class="required-asterisk">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="latitude" name="latitude" required pattern="[0-9]+(\.[0-9]+)?">
+                                <div class="invalid-feedback">Please enter a valid latitude.</div>
                             </div>
-                        <div class="modal-footer">
-                            <div class="col-3">
-                            <button type="submit" name="add-toda" class="btn btn-primary " >Add</button>
                         </div>
+                        <div class="d-flex form-group m-2">
+                            <label for="longitude" class="col-sm-4 col-form-label">Longitude<span class="required-asterisk">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="longitude" name="longitude" required pattern="[0-9]+(\.[0-9]+)?">
+                                <div class="invalid-feedback">Please enter a valid longitude.</div>
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="col-4 mx-4">
+                        <button type="submit" name="add-toda" class="btn btn-primary " >Add</button>
+                    </div>
                     </div>
                 </form>
             </div>
@@ -279,7 +340,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="" method="POST" class="needs-validation" novalidate>
-                <div class="modal-body px-5 py-2">
+                <div class="modal-body">
                     <!-- Existing input fields for Toda details -->
                     <div class="form-group m-2">
                         <div class="col-sm-12">
@@ -310,7 +371,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <div class="col-3 mx-4">
+                    <div class="col-4 mx-4">
                         <button type="submit" name="add-route" class="btn btn-primary">Add Route</button>
                     </div>
                 </div>
@@ -345,52 +406,57 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div> 
                 <form action="" method="POST" class="needs-validation" novalidate p-1>
-                    <div class="modal-body px-5 py-2">
-                        <div class="form-group ">
-                            <label for="editToda" class="col-sm-3 col-form-label">TODA Name<span class="required-asterisk">*</span></label>
-                            <div class="row-sm-12">
-                                <input type="text" class="form-control" id="editToda" name="editToda" required> 
-                                <div class="invalid-feedback">Please fill up this field.</div>
-                            </div>
+                    <div class="modal-body">
+                    <div class="form-group mx-5 my-1">
+                        <label for="editToda" class="col-sm-3 col-form-label">TODA Name<span class="required-asterisk">*</span></label>
+                        <div class="row-sm-12">
+                            <input type="text" class="form-control" id="editToda" name="editToda" required> 
+                            <div class="invalid-feedback">Please fill up this field.</div>
                         </div>
-                        <div class="form-group">
-                            <label for="editTodaTerminal" class="col-sm-6 col-form-label">Terminal <span class="required-asterisk">*</span></label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" id="editTodaTerminal" name="editTodaTerminal" required>
-                                <div class="invalid-feedback">Please fill up this field.</div>
-                            </div>
+                    </div>
+                    <div class="form-group mx-5 my-1">
+                        <label for="editTodaTerminal" class="col-sm-6 col-form-label">Terminal <span class="required-asterisk">*</span></label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="editTodaTerminal" name="editTodaTerminal" required>
+                            <div class="invalid-feedback">Please fill up this field.</div>
                         </div>
-                        <br>
-                        <div id="mapEditEvent" style="width: 100%; height: 400px; margin: auto; border: 1px solid #20a2aa; border-radius: 10px; overflow: hidden;"></div>
-                            <div class="d-flex justify-content-between flex-column mt-2">
-                                <div class="form-group d-flex my-2">
-                                    <label for="latitudeEditEvent" class="col-sm-4 col-form-label">Latitude <span class="required-asterisk">*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="latitudeEditEvent" name="latitude" required readonly>
-                                        <div class="invalid-feedback">Please enter a valid latitude.</div>
-                                    </div>
-                                </div>
-                                <div class="form-group d-flex my-2">
-                                    <label for="longitudeEditEvent" class="col-sm-4 col-form-label">Longitude<span class="required-asterisk">*</span></label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="longitudeEditEvent" name="longitude" required readonly>
-                                        <div class="invalid-feedback">Please enter a valid longitude.</div>
-                                    </div>
-                                </div>
+                    </div>
+
+                        <div class="row mx-auto p-4">
+                            <div class="col-4 text-center">
+                                <span>Route</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span>1 passenger</span>
+                            </div>
+                            <div class="col-4 text-center">
+                                <span>2 passenger</span>
                             </div>
                     
-                        <div class="modal-footer">
-                            <div class="col-3">
-                                <input type="hidden" class="form-control" id="editselectedTodaId" name="editselectedTodaId"  required>
-                                <button type="submit" name="edit-toda" class="btn btn-primary">Save Changes</button>
+                            <div class="col-4 text-center p-4">
+                                <input type="text" class="form-control" id="editRoute" name="editRoute" required>
+                                <div class="invalid-feedback">Please enter a valid number.</div>
                             </div>
-                        </div>
+                            <div class="col-4 text-center p-4">
+                                <input type="text" class="form-control" id="editPassenger1" name="editPassenger1" required>
+                                <div class="invalid-feedback">Please enter a valid number.</div>
+                            </div>
+                            <div class="col-4 text-center p-4">
+                                <input type="text" class="form-control" id="editPassenger2" name="editPassenger2" required>
+                                <div class="invalid-feedback" >Please enter a valid number</div>
+                            </div> 
+                    
+                    <div class="modal-footer">
+                        <div class="col-3 mx-4">
+                        <button type="submit" name="edit-toda" class="btn btn-primary" >Save Changes</button>
+                    </div>
                     </div>
                 
                 </form>
             </div>
         </div>
     </div>
+    
 
     <script src="modal.js"></script>
 
@@ -413,141 +479,12 @@
         <?php unset($_SESSION['add_success']); ?>
     <?php endif; ?>
 
-    <!-- archive modal -->
-    <div class="modal fade" id="archiveTodaFare" data-bs-backdrop="static" tabindex="-1" aria-labelledby="arcmodalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addExploreLabel">Archive Toda</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div> 
-                <form action="" method="POST">
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <p class="text-center fs-5">You're about to archive the <b><span id="archive-name"></span></b>.</p>
-                                <br>
-                                <p class="opacity-75 fw-light text-muted" >*Archives will automatically be deleted after 30 days.</p>
-                            </div>
-                        </div>        
-                    <div class="modal-footer">
-                        <div class="col-4 mx-4">
-                            <input type="hidden" class="form-control" id="archiveId" name="archiveId" required>
-                            <button type="submit" name="archive-toda" class="btn btn-primary">Archive</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-    <?php if(isset($_SESSION['update_fare_modal']) && $_SESSION['update_fare_modal']):
-        echo '<script src="updatefare.js"></script>';
-        unset($_SESSION['update_fare_modal']);
-    endif; ?>
-
-    <div class="modal fade" id="updateFareModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateFareModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 900px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editTodaFare">Update Fare</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div> 
-            <form action="" method="POST" class="needs-validation" novalidate p-1>
-                <div class="modal-body px-5 py-2">
-                    <div class="form-group ">
-                        <label for="editToda" class="col-sm-3 col-form-label">Fare<span class="required-asterisk">*</span></label>
-                        <div class="row-sm-12">
-                            <input type="text" class="form-control" id="editToda" name="editToda" value="<?php $rowDataFare[3]; ?>"required> 
-                            <div class="invalid-feedback">Please fill up this field.</div>
-                        </div>
-                    </div>
-                    
-                    <div class="modal-footer">
-                        <div class="col-3">
-                            <input type="hidden" class="form-control" id="updateFareId" name="updateFareId" required>
-                            <button type="submit" name="updateFare" class="btn btn-primary">Update</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
 <?php
 if (isset($_SESSION['selectedTodaId'])) {
     $selectedTodaId = $_SESSION['selectedTodaId'];
 }
 ?>
 
-<script>
-        // Function to initialize a map and geocoder for an event form
-        function initializeMapAndGeocoder(mapContainerId, latitudeInputId, longitudeInputId, isEditForm) {
-            var map = L.map(mapContainerId).setView([14.8064, 120.9614], 13);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            var marker = L.marker([14.8064, 120.9614], {
-                draggable: true,
-                iconAnchor: [16, 37]
-            }).addTo(map);
-
-            // Update latitude and longitude input fields when marker is dragged
-            marker.on('drag', function (event) {
-                var markerLatLng = marker.getLatLng();
-                document.getElementById(latitudeInputId).value = markerLatLng.lat.toFixed(15);
-                document.getElementById(longitudeInputId).value = markerLatLng.lng.toFixed(15);
-            });
-
-            // If it's an edit form, set the marker position based on the existing latitude and longitude
-            if (isEditForm) {
-                var existingLatitude = parseFloat(document.getElementById(latitudeInputId).value);
-                var existingLongitude = parseFloat(document.getElementById(longitudeInputId).value);
-
-                if (!isNaN(existingLatitude) && !isNaN(existingLongitude)) {
-                    var existingLatLng = L.latLng(existingLatitude, existingLongitude);
-                    map.setView(existingLatLng, 13);
-                    marker.setLatLng(existingLatLng);
-                }
-            }
-
-            var geocoder = L.Control.geocoder({
-                defaultMarkGeocode: false
-            }).on('markgeocode', function(e) {
-                var latlng = e.geocode.center;
-                map.setView(latlng, 13);
-                marker.setLatLng(latlng);
-                document.getElementById(latitudeInputId).value = latlng.lat.toFixed(15);
-                document.getElementById(longitudeInputId).value = latlng.lng.toFixed(15);
-            }).addTo(map);
-
-            geocoder.on('markgeocode', function (event) {
-                var location = event.geocode.center;
-                map.setView(location, 13); // Set the map view to the searched location
-                marker.setLatLng(location); // Move the marker to the searched location
-                document.getElementById(latitudeInputId).value = location.lat.toFixed(15);
-                document.getElementById(longitudeInputId).value = location.lng.toFixed(15);
-            });
-        }
-
-        // Initialize maps and geocoders for each form
-        initializeMapAndGeocoder('mapAddEvent', 'latitudeAddEvent', 'longitudeAddEvent', false);
-        initializeMapAndGeocoder('mapEditEvent', 'latitudeEditEvent', 'longitudeEditEvent', true);
-    </script>
+</script>
 </body>
 </html>

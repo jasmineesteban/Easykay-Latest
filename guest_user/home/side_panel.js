@@ -22,7 +22,7 @@ var sidepanel = L.Control.extend({
             </div>
             <div class="offcanvas-body sidepanel-body">
                 <div class="location-form">
-                    <form class="" method="POST" id="myGoForm">
+                    <form class="" method="POST" id="myForm">
                         <input class="form-control mb-2" type="text" placeholder="Origin" id="origin">
                         <input class="form-control mb-3" type="text" placeholder="Your Destination" id="destination">
                     
@@ -40,14 +40,20 @@ var sidepanel = L.Control.extend({
                                 </div>
                             </div>
                             <div class="col-3 text-end">
-                                <button type="submit" class="btn btn-outline-primary go">Go</button>
+                                <button type="submit" class="btn btn-outline-primary go" name="submit">Go</button>
                             </div>
                         </div>  
                     </form>
                 </div>
                 <hr>
                 <div class="travels p-2 bg-light">
+                    <?php if(isset(&_POST['submit'])){?>
+                    <div class="">
 
+
+
+                    </div>
+                    <?php }?>
                 </div>
                 <hr>
                 <div class="sidepanel-footer">
@@ -66,6 +72,7 @@ var sidepanel = L.Control.extend({
 var sidepanelInstance = new sidepanel();
 sidepanelInstance.addTo(map);
 
+
 function incrementValue() {
     var value = parseInt(document.getElementById('passengerInput').value, 10);
     value = isNaN(value) ? 1 : value;
@@ -79,3 +86,31 @@ function decrementValue() {
     value = value > 1 ? value - 1 : 1;
     document.getElementById('passengerInput').value = value;
 }
+
+// Function to get URL parameters
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var urlLatitude = getUrlParameter('latitude');
+    var urlLongitude = getUrlParameter('longitude');
+    var urlDestination = getUrlParameter('destination');
+
+    console.log('urlLatitude:', urlLatitude);
+    console.log('urlLongitude:', urlLongitude);
+    console.log('urlDestination:', urlDestination);
+
+    // Check if the form is not already submitted and latitude and longitude are present
+    if (urlLatitude && urlLongitude) {
+        console.log('Setting destination from latitude and longitude:', urlLatitude, urlLongitude);
+        document.getElementById('destination').value = urlLatitude + ', ' + urlLongitude;
+    } 
+    if (urlDestination) {
+        console.log('Setting destination from urlDestination:', urlDestination);
+        document.getElementById('destination').value = urlDestination;
+    }
+});

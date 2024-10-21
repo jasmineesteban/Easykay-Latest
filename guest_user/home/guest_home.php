@@ -1,3 +1,60 @@
+<?php
+    session_start();
+
+    include "../../connection.php";
+    include "route_handler.php";
+     // Retrieve latitude and longitude from URL parameters
+    $destinationLatitude = isset($_GET['latitude']) ? $_GET['latitude'] : null;
+    $destinationLongitude = isset($_GET['longitude']) ? $_GET['longitude'] : null;
+    $destination = isset($_GET['destination']) ? $_GET['destination'] : null;
+
+    $originJeepLat = isset($_GET['jeepOriginLat']) ? $_GET['jeepOriginLat'] : null;
+    $originJeepLng = isset($_GET['jeepOriginLng']) ? $_GET['jeepOriginLng'] : null;
+    $destinationJeepLat = isset($_GET['jeepDestinationLat']) ? $_GET['jeepDestinationLat'] : null;
+    $destinationJeepLng = isset($_GET['jeepDestinationLng']) ? $_GET['jeepDestinationLng'] : null;
+
+    $originBusLat = isset($_GET['busOriginLat']) ? $_GET['busOriginLat'] : null;
+    $originBusLng = isset($_GET['busOriginLng']) ? $_GET['busOriginLng'] : null;
+    $destinationBusLat = isset($_GET['busDestinationLat']) ? $_GET['busDestinationLat'] : null;
+    $destinationBusLng = isset($_GET['busDestinationLng']) ? $_GET['busDestinationLng'] : null;
+
+    $vehicleType = isset($_GET['vehicleType']) ? $_GET['vehicleType'] : null;
+
+    $jeepFare = array();
+
+    $jeepQuery = mysqli_query($conn, "SELECT * FROM jeep_fare");
+    
+    if($jeepQuery){
+        // Fetching the result row by row
+        while ($row = mysqli_fetch_assoc($jeepQuery)) {
+            $jfare = [
+                'jeep_regular' => $row['jeep_regular'],
+                'jeep_regular_succeeding' => $row['jeep_regular_succeeding'],
+                'jeep_discounted' => $row['jeep_discounted'],
+                'jeep_discounted_succeeding' => $row['jeep_discounted_succeeding'],
+            ];
+            $jeepFare = $jfare;
+        }
+    }
+
+    $busFare = array();
+
+    $busQuery = mysqli_query($conn, "SELECT * FROM bus_fare");
+
+    if ($busQuery) {
+        // Fetching the result row by row
+        while ($row = mysqli_fetch_assoc($busQuery)) {
+            $bfare = [
+                'bus_regular' => $row['bus_regular'],
+                'bus_regular_succeeding' => $row['bus_regular_succeeding'],
+                'bus_discounted' => $row['bus_discounted'],
+                'bus_discounted_succeeding' => $row['bus_discounted_succeeding'],
+            ];
+            $busFare = $bfare;
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,16 +80,15 @@
     .leaflet-routing-container .leaflet-control-container .leaflet-routing-container-hide {
         display: none;
     }
-
 </style>
 </head>
 <body>
-    <div id="map">
+<div id="map">
 
-    </div>
+</div>
 </body>
-    <script>
-        var map = L.map('map', {
+<script>
+    var map = L.map('map', {
             zoomControl: false
         }).setView([14.8191792, 120.9617524], 13);
     
@@ -44,80 +100,86 @@
         });
         osm.addTo(map);
 
-        var burMenuControl = L.Control.extend({
+       //navbar
+
+    var burMenuControl = L.Control.extend({
         options: {
             position: 'topright'
-        },  
-            onAdd: function (map) {
-                var container = L.DomUtil.create('div', "dropdown-menu-content");
-                container.innerHTML =  `<div class="dropdown">
-                    <button class="btn btn-secondary burger-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-bars"></i>
-                    </button>
-                    <ul class="dropdown-menu px-1 ">
-                        <li><a class="dropdown-item py-1 my-2 btn-active" href="guest_home.php">Home</a></li>
-                        <li><a class="dropdown-item py-1 my-2" href="../event/guest_event.php">Events</a></li>
-                    </ul>
-                </div>
-                `;
-                return container;
-            }
-        });
-        // zoom control
-        L.control.zoom({
+        },
+
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', "dropdown-menu-content");
+            container.innerHTML =  `<div class="dropdown">
+                <button class="btn btn-secondary burger-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <ul class="dropdown-menu px-1 ">
+                    <li><a class="dropdown-item py-1 my-2 btn-active" href="guest_home.php">Home</a></li>
+                    <li><a class="dropdown-item py-1 my-2" href="../event/guest_event.php">Events</a></li>
+                </ul>
+            </div>
+            `;
+            return container;
+        }
+    });
+
+    // zoom control
+    L.control.zoom({
             position: 'bottomright', 
             zoomInText: '+',       
             zoomOutText: '-',      
         }).addTo(map);
 
+
         var ToggleLocationControl = L.Control.extend({
             options: {
                 position: 'bottomright'
             },
+
             onAdd: function (map) {
                 var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
                 container.innerHTML = '<button id="toggleLocationBtn" class="btn fa-solid fa-location-crosshairs location-icon"></button>';
                 return container;
             }
         });
+
         var jeepTerminalButton = L.Control.extend({
         options: {
             position: 'bottomright'
         },
-            onAdd: function (map) {
-                var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
 
-                // Include your SVG code here
-                var svgIcon = '<img class="jeep-icon" width="24" height="24" src="icons/jeep.svg"></img>';
+        onAdd: function (map) {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
 
-                container.innerHTML = '<button id="jeepTerminalBtn" class="btn">' + svgIcon + '</button>';
-                return container;
-            }
-        });
+            // Include your SVG code here
+            var svgIcon = '<img class="jeep-icon" width="24" height="24" src="icons/jeep.svg"></img>';
 
-        var burMenuControlInstance = new burMenuControl();
-        burMenuControlInstance.addTo(map);
+            container.innerHTML = '<button id="jeepTerminalBtn" class="btn">' + svgIcon + '</button>';
+            return container;
+        }
+    });
 
-        var jeepTerminalButtonInstance = new jeepTerminalButton();
-        jeepTerminalButtonInstance.addTo(map);
+    var burMenuControlInstance = new burMenuControl();
+    burMenuControlInstance.addTo(map);
 
-    </script>
-    <script src="jeep.js"> // locate jeep terminal </script> 
-    <script src="side_panel.js"> // side panel </script> 
-    <script>
-        var lat, long, currLocMarker, currLocCircle, currentLocation, watchId;
+    var jeepTerminalButtonInstance = new jeepTerminalButton();
+    jeepTerminalButtonInstance.addTo(map);
 
-       // var  destinationMarker, destinationCircle, originMarker;
-       // var currentLocation, destinationLocation;
-       // var lat, long, accuracy;
-       // var watchId;
-       // var destinationInput, originInput, numPassenger;
-       // var polyline, currpolyline;
-       // var nearestBusCoordinates, nearestJeepCoordinates;
-       // var totalBusDistance = 0;
-       // var originBusDistance = 0;
-       // var destinationBusDistance = 0;
-       // var vehicleType;
+</script>
+
+<script>
+        var currLocMarker, currLocCircle, destinationMarker, destinationCircle;
+        var currentLocation, destinationLocation;
+        var lat, long, accuracy;
+        var watchId;
+        var destinationInput, originInput, numPassenger;
+        var destinationMarker, originMarker; 
+        var polyline, currpolyline;
+        var nearestBusCoordinates, nearestJeepCoordinates;
+        var totalBusDistance = 0;
+        var originBusDistance = 0;
+        var destinationBusDistance = 0;
+        var vehicleType;
 
         //real time location
         if(!navigator.geolocation){
@@ -131,30 +193,31 @@
                 // console.log(position)
             lat = position.coords.latitude
             long = position.coords.longitude
-            
+            accuracy = position.coords.accuracy
 
             if(currLocMarker){
                 map.removeLayer(currLocMarker);
                 map.removeLayer(currLocCircle);
             }
 
-            currLocMarker = L.marker([lat, long]).addTo(map);
+            currLocMarker = L.marker([lat, long])
             currLocCircle = L.circle([lat, long], {
                 color: '#20A2AA',
                 fillColor: '#20A2AA',
                 fillOpacity: 0.5,
                 radius: 20
-            }).addTo(map);
+            })
             currLocMarker.bindPopup('You are here.').openPopup();
 
+            currentLocation = L.featureGroup([currLocMarker, currLocCircle]).addTo(map);
             document.getElementById('origin').placeholder = 'Your location';
 
-            console.log(lat, long)
+            console.log(lat, long, accuracy)
            
         }
 
-         // Function to toggle geolocation updates
-         function toggleLocation() {
+        // Function to toggle geolocation updates
+        function toggleLocation() {
             if(navigator.geolocation){
                 if (watchId) {
                     navigator.geolocation.clearWatch(watchId);
@@ -205,56 +268,416 @@
 
         setInterval(updateButtonState, 1000);
 
-        var destinationMarker, originMarker, desMarkerLatLng, destinationCircle;
-        var originMarker, originCircle;
+</script>
+<script src="jeep.js"></script>
+<!---------------------- SIDE PANEL ---------------------->
+<script>
+var sidepanel = L.Control.extend({
+    options: {
+        position: 'topleft'
+    },
+    onAdd: function (map) {
+        var container = L.DomUtil.create('div', "sidepanel-content");
+        container.innerHTML =  `
 
-    </script>
-    <script src="functions.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var urlLatitude = getUrlParameter('latitude');
-            var urlLongitude = getUrlParameter('longitude');
-            var urlDestination = getUrlParameter('destination');
+        <button class="btn btn-primary open-side px-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidepanelScrolling"
+         aria-controls="sidepanelScrolling"><i class="fa-solid fa-caret-right fs-6"></i></button>
+        
+         <div class="offcanvas offcanvas-start shadow-sm" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="sidepanelScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header sidepanel-header py-2">
+                <div class="row">
+                    <div class="col-2 m-auto"><img class="sidepanel-logo w-100" src="../../images/logo.png" alt="Easykay Logo"></div>
+                    <div class="col-7"><a class="navbar-brand fs-5" href="../../index.php">EasyKay</a></div>
+                    <div class="col-3 text-end">
+                    <button type="button" class="fa-solid fa-xmark btn fs-5 mx-2 my-1 col-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="offcanvas-body sidepanel-body">
+                <div class="location-form">
+                    <form class="" method="POST" id="myGoForm">
+                        <input class="form-control mb-2" type="text" placeholder="Origin" id="origin">
+                        <input class="form-control mb-3" type="text" placeholder="Your Destination" id="destination">
+                    
+                        <div class="d-flex mb-3 ">
+                            <div class="col-9 col-lg d-flex justify-content-center align-items-center">
+                                <span class="fa-solid fa-user"> <span class="mx-2 me-3 "> Passenger</span></span>
+                                <div class="input-group-append">
+                                    <button class="button px-2" type="button" onclick="decrementValue()"> - </button>
+                                </div>
+                                <div class="input-group-num">
+                                    <input type="number" class="" id="passengerInput" value="1" min="1" max="3" readonly>
+                                </div>
+                                <div class="input-group-prepend">
+                                    <button class="button px-2" type="button" onclick="incrementValue()">+</button>
+                                </div>
+                            </div>
+                            <div class="col-3 text-end">
+                                <button type="submit" class="btn btn-outline-primary go">Go</button>
+                            </div>
+                        </div>  
+                    </form>
+                </div>
+                <hr>
+                <div class="travels p-2 bg-light">
 
-            console.log('urlLatitude:', urlLatitude);
-            console.log('urlLongitude:', urlLongitude);
-            console.log('urlDestination:', urlDestination);
+                </div>
+                <hr>
+                <div class="sidepanel-footer">
+                <div><p class="text-muted text-end pt-2">*Price may vary according to the time of your commute.</p></div>
+            </div>
+            </div>
+            
+        </div>
 
-            // Check if the form is not already submitted and latitude and longitude are present
-            if (urlLatitude && urlLongitude) {
-                console.log('Setting destination from latitude and longitude:', urlLatitude, urlLongitude);
-                document.getElementById('destination').value = urlLatitude + ', ' + urlLongitude;
-            } 
-            if (urlDestination) {
-                console.log('Setting destination from urlDestination:', urlDestination);
-                document.getElementById('destination').value = urlDestination;
-            }
-        });
+        `;
+       
+    return container;
+}
+})
 
-        var myGoForm = document.getElementById('myGoForm');
-        if (myGoForm) {
-            myGoForm.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the form from submitting
+var sidepanelInstance = new sidepanel();
+sidepanelInstance.addTo(map);
 
-                var originInput = document.getElementById('origin').value.trim();
-                var destinationInput = document.getElementById('destination').value.trim();
-                var numPassenger = document.getElementById('passengerInput').value.trim();
+function incrementValue() {
+    var value = parseInt(document.getElementById('passengerInput').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value = value < 3 ? value + 1 : 3;
+    document.getElementById('passengerInput').value = value;
+}
 
-                if(originInput !== '' && destinationInput !== ''){
-                    geocodeDestination();
-                    geocodeOrigin(numPassenger);
-                }
-                if(originInput === '' && destinationInput !== ''){
-                    geocodeDestination();
-                }
-            });
+function decrementValue() {
+    var value = parseInt(document.getElementById('passengerInput').value, 10);
+    value = isNaN(value) ? 1 : value;
+    value = value > 1 ? value - 1 : 1;
+    document.getElementById('passengerInput').value = value;
+}
+
+// Function to get URL parameters
+function getUrlParameter(name) {
+    name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    var urlLatitude = getUrlParameter('latitude');
+    var urlLongitude = getUrlParameter('longitude');
+    var urlDestination = getUrlParameter('destination');
+
+    console.log('urlLatitude:', urlLatitude);
+    console.log('urlLongitude:', urlLongitude);
+    console.log('urlDestination:', urlDestination);
+
+    // Check if the form is not already submitted and latitude and longitude are present
+    if (urlLatitude && urlLongitude) {
+        console.log('Setting destination from latitude and longitude:', urlLatitude, urlLongitude);
+        document.getElementById('destination').value = urlLatitude + ', ' + urlLongitude;
+    } 
+    if (urlDestination) {
+        console.log('Setting destination from urlDestination:', urlDestination);
+        document.getElementById('destination').value = urlDestination;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    var urljeeporigLatitude = getUrlParameter('jeepOriginLat');
+    var urljeeporigLongitude = getUrlParameter('jeepOriginLng');
+    var urljeepdestinationLatitude = getUrlParameter('jeepDestinationLat');
+    var urljeepdestinationLongitude = getUrlParameter('jeepDestinationLng');
+
+    var urlbusorigLatitude = getUrlParameter('busOriginLat');
+    var urlbusorigLongitude = getUrlParameter('busOriginLng');
+    var urlbusdestinationLatitude = getUrlParameter('busDestinationLat');
+    var urlbusdestinationLongitude = getUrlParameter('busDestinationLng');
+
+    var urlvehicleType = getUrlParameter('vehicleType');
+
+    console.log('urlLatitude:', urljeeporigLatitude);
+    console.log('urlLongitude:', urljeeporigLongitude);
+    console.log('urlLatitude:', urljeepdestinationLatitude);
+    console.log('urlLongitude:', urljeepdestinationLongitude);
+
+    if (urljeeporigLatitude && urljeeporigLongitude && urljeepdestinationLatitude && urljeepdestinationLongitude) {
+        var origlat = parseFloat(urljeeporigLatitude);
+        var origlng = parseFloat(urljeeporigLongitude);
+        var destinationlat = parseFloat(urljeepdestinationLatitude);
+        var destinationlng = parseFloat(urljeepdestinationLongitude);
+        var type = urlvehicleType;
+        console.log('origlat: ' + origlat);
+        console.log(type);
+
+        var originMarker = L.marker([origlat, origlng]).addTo(map);
+        originCircle = L.circle([origlat, origlng], {
+                        color: '#20A2AA',
+                        fillColor: '#20A2AA',
+                        fillOpacity: 0.5,
+                        radius: 20
+                    }).addTo(map);
+
+                    originMarker.bindPopup('Your origin.').openPopup();
+
+        destinationMarker = L.marker([destinationlat, destinationlng], {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                        })
+                    }).addTo(map);
+                    destinationCircle = L.circle([destinationlat, destinationlng], {
+                        color: 'red',
+                        fillColor: 'red',
+                        fillOpacity: 0.5,
+                        radius: 20
+                    }).addTo(map);
+
+                    destinationMarker.bindPopup('Your destination.').openPopup();
+        if(type === 'Jeep'){
+            drawJeepPolyline(originMarker, destinationMarker);
         }
 
-        function defineMarker(originLatLng, destinationLatLng, numPassenger){
-        var pass = numPassenger;
-        console.log('originmarker:' +  originLatLng);
+    }
+    if (urlbusorigLatitude && urlbusorigLongitude && urlbusdestinationLatitude && urlbusdestinationLongitude){
+        var origlat = parseFloat(urlbusorigLatitude);
+        var origlng = parseFloat(urlbusorigLongitude);
+        var destinationlat = parseFloat(urlbusdestinationLatitude);
+        var destinationlng = parseFloat(urlbusdestinationLongitude);
+        var type = urlvehicleType;
 
-        if(originLatLng  && destinationLatLng){
+        var originMarker = L.marker([origlat, origlng]).addTo(map);
+        originCircle = L.circle([origlat, origlng], {
+                        color: '#20A2AA',
+                        fillColor: '#20A2AA',
+                        fillOpacity: 0.5,
+                        radius: 20
+                    }).addTo(map);
+
+                    originMarker.bindPopup('Your origin.').openPopup();
+
+        destinationMarker = L.marker([destinationlat, destinationlng], {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                        })
+                    }).addTo(map);
+                    destinationCircle = L.circle([destinationlat, destinationlng], {
+                        color: 'red',
+                        fillColor: 'red',
+                        fillOpacity: 0.5,
+                        radius: 20
+                    }).addTo(map);
+
+                    destinationMarker.bindPopup('Your destination.').openPopup();
+        if(type === 'Bus'){
+            drawBusPolyline(originMarker, destinationMarker);
+        }
+
+    }
+
+});
+
+function drawJeepPolyline(originMarker, destinationMarker){
+    var originLatLng = originMarker.getLatLng();
+    var destinationLatLng = destinationMarker.getLatLng();
+    var jeepRoutes = <?php echo json_encode($routes); ?>;
+
+    var jeepRoutePathCoordinates = [];
+    var polylineCoordinates = [];
+    console.log(originLatLng);
+
+    var origin = findNearestJeepCoordinates(originLatLng, jeepRoutes);
+    var destination = findNearestJeepCoordinates(destinationLatLng, jeepRoutes);
+    console.log(origin);
+
+    for(var i = 1; i < jeepRoutes.length; i++){
+        var route = jeepRoutes[i];
+         console.log('route: ', route)
+            if (route.latitude === origin.latitude && route.longitude === origin.longitude) {
+                jeepRoutePathCoordinates.push([route.latitude, route.longitude]);
+                var k=0;
+                for (var j = i + 1; j < jeepRoutes.length; j++) {
+                    var nextRoute = jeepRoutes[j];
+                    jeepRoutePathCoordinates.push([nextRoute.latitude, nextRoute.longitude]);
+                    console.log(jeepRoutePathCoordinates[k]);
+                    k++;
+                    if(nextRoute.latitude === destination.latitude && nextRoute.longitude === destination.longitude) {
+                        break;
+                    }
+                }
+                break; 
+            }
+        }
+        for (var j = 0; j < jeepRoutePathCoordinates.length; j++) {
+            var routePath = jeepRoutePathCoordinates[j]; // Access the coordinates using index j, not k
+            polylineCoordinates.push([routePath[0], routePath[1]]);
+            console.log(polylineCoordinates[j]);
+        }
+
+        for (var l = 0; l < polylineCoordinates.length - 1; l++) {
+            var firstroute = polylineCoordinates[l];
+            var nextroute = polylineCoordinates[l + 1];
+
+            var polyline = L.polyline([
+                [firstroute[0], firstroute[1]],
+                [nextroute[0], nextroute[1]]
+            ], { color: '#20A2AA', weight: 5 }).addTo(map);
+        }
+
+        var originRoutingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng([originLatLng.lat, originLatLng.lng]),
+                    L.latLng([origin.latitude, origin.longitude])
+                ],
+                createMarker: function() { return null; },
+                show: false,
+                lineOptions: {
+                styles: [{ color: '#20A2AA', weight: 5 }]
+            }
+            }).on('routeselected', function(e) {
+                var route = e.route;
+                var routeCoordinates = route.coordinates;
+                var polyline = L.polyline(routeCoordinates, { color: '#20A2AA', weight: 5 }).addTo(map);
+            });
+
+            var destinationRoutingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng([destinationLatLng.lat, destinationLatLng.lng]),
+                    L.latLng([destination.latitude, destination.longitude])
+                ],
+                createMarker: function() { return null; },
+                show: false,
+                lineOptions: {
+                styles: [{ color: '#20A2AA', weight: 5 }]
+            }
+            }).on('routeselected', function(e) {
+                var route = e.route;
+                var routeCoordinates = route.coordinates;
+                var polyline = L.polyline(routeCoordinates, { color: '#20A2AA', weight: 5 }).addTo(map);
+            });
+            
+           
+            originRoutingControl.addTo(map);
+            destinationRoutingControl.addTo(map);
+}
+function drawBusPolyline(originMarker, destinationMarker){
+    var originLatLng = originMarker.getLatLng();
+    var destinationLatLng = destinationMarker.getLatLng();
+    var busRoutes = <?php echo json_encode($busRoutes); ?>;
+
+    var busRoutePathCoordinates = [];
+    var polylineCoordinates = [];
+    console.log(originLatLng);
+
+    var origin = findNearestJeepCoordinates(originLatLng, busRoutes);
+    var destination = findNearestJeepCoordinates(destinationLatLng, busRoutes);
+    console.log(origin);
+
+    for(var i = 1; i < busRoutes.length; i++){
+        var route = busRoutes[i];
+         console.log('route: ', route)
+            if (route.latitude === origin.latitude && route.longitude === origin.longitude) {
+                busRoutePathCoordinates.push([route.latitude, route.longitude]);
+                var k=0;
+                for (var j = i + 1; j < busRoutes.length; j++) {
+                    var nextRoute = busRoutes[j];
+                    busRoutePathCoordinates.push([nextRoute.latitude, nextRoute.longitude]);
+                    console.log(busRoutePathCoordinates[k]);
+                    k++;
+                    if(nextRoute.latitude === destination.latitude && nextRoute.longitude === destination.longitude) {
+                        break;
+                    }
+                }
+                break; 
+            }
+        }
+        for (var j = 0; j < busRoutePathCoordinates.length; j++) {
+            var routePath = busRoutePathCoordinates[j]; // Access the coordinates using index j, not k
+            polylineCoordinates.push([routePath[0], routePath[1]]);
+            console.log(polylineCoordinates[j]);
+        }
+
+        for (var l = 0; l < polylineCoordinates.length - 1; l++) {
+            var firstroute = polylineCoordinates[l];
+            var nextroute = polylineCoordinates[l + 1];
+
+            var polyline = L.polyline([
+                [firstroute[0], firstroute[1]],
+                [nextroute[0], nextroute[1]]
+            ], { color: '#20A2AA', weight: 5 }).addTo(map);
+        }
+
+        var originRoutingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng([originLatLng.lat, originLatLng.lng]),
+                    L.latLng([origin.latitude, origin.longitude])
+                ],
+                createMarker: function() { return null; },
+                show: false,
+                lineOptions: {
+                styles: [{ color: '#20A2AA', weight: 5 }]
+            }
+            }).on('routeselected', function(e) {
+                var route = e.route;
+                var routeCoordinates = route.coordinates;
+                var polyline = L.polyline(routeCoordinates, { color: '#20A2AA', weight: 5 }).addTo(map);
+            });
+
+            var destinationRoutingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng([destinationLatLng.lat, destinationLatLng.lng]),
+                    L.latLng([destination.latitude, destination.longitude])
+                ],
+                createMarker: function() { return null; },
+                show: false,
+                lineOptions: {
+                styles: [{ color: '#20A2AA', weight: 5 }]
+            }
+            }).on('routeselected', function(e) {
+                var route = e.route;
+                var routeCoordinates = route.coordinates;
+                var polyline = L.polyline(routeCoordinates, { color: '#20A2AA', weight: 5 }).addTo(map);
+            });
+
+            originRoutingControl.addTo(map);
+            destinationRoutingControl.addTo(map);
+}
+
+
+
+</script>
+<script>
+
+var myGoForm = document.getElementById('myGoForm');
+if (myGoForm) {
+    myGoForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent the form from submitting
+
+        var originInput = document.getElementById('origin').value.trim();
+        var destinationInput = document.getElementById('destination').value.trim();
+        var numPassenger = document.getElementById('passengerInput').value.trim();
+
+        if(originInput !== '' && destinationInput !== ''){
+            var originLatLng;
+            var destinationLatLng;
+
+            geocodeDestination();
+            geocodeOrigin(numPassenger);
+        
+        }
+        
+    });
+}
+
+function defineMarker(originLatLng, destinationLatLng, numPassenger){
+    var pass = numPassenger;
+    console.log('originmarker:' +  originLatLng);
+
+    if(originLatLng  && destinationLatLng){
             var busRoutes = <?php echo json_encode($busRoutes); ?>;
             var jeepRoutes = <?php echo json_encode($routes); ?>;
             console.log('Origin Coordinates:' + originLatLng.lng);
@@ -278,15 +701,16 @@
 
             console.log('Origin bus: ' + JSON.stringify(nearestOriginBusCoordinates));
             console.log('Bus Fare: ' + busFareRegular);
-        }
-        var travelsSection = document.querySelector('.travels');
-        travelsSection.innerHTML = '';
-        if(nearestOriginBusCoordinates && nearestDestinationBusCoordinates){
+    }
+    var travelsSection = document.querySelector('.travels');
+    travelsSection.innerHTML = '';
+    if(nearestOriginBusCoordinates && nearestDestinationBusCoordinates){
             travelsSection.innerHTML += `
             <form class="travels-form" method="GET" id="myForm">
-                <input type="hidden" name="origin" id="origin" value="${originInput}">
-                <input type="hidden" name="destination" id="destination" value="${destinationInput}">
-                <input type="hidden" name="passenger" id="passenger" value="${pass}">
+                <input type="hidden" name="busOriginLat" id="busOriginLat" value="${originLatLng.lat}">
+                <input type="hidden" name="busOriginLng" id="busOriginLng" value="${originLatLng.lng}">
+                <input type="hidden" name="busDestinationLat" id="busDestinationLat" value="${destinationLatLng.lat}">
+                <input type="hidden" name="busDestinationLng" id="busDestinationLng" value="${destinationLatLng.lng}">
                 <input type="hidden" name="vehicleType" id="vehicleType" value="Bus">
                 <button type="submit" class="form-control my-3 py-3">
                     <div class="row">
@@ -321,60 +745,168 @@
                 </button>
                 </form>
             `;
-        }
-        if(nearestOriginJeepCoordinates && nearestDestinationJeepCoordinates){
-                travelsSection.innerHTML += `
-                <form class="travels-form" method="GET" id="myForm">
-                    <input type="hidden" name="origin" id="origin" value="${originInput}">
-                    <input type="hidden" name="destination" id="destination" value="${destinationInput}">
-                    <input type="hidden" name="passenger" id="passenger" value="${pass}">
-                    <input type="hidden" name="vehicleType" id="busDestination" value="Jeep">
-                    <button type="submit" class="form-control my-3 py-3">
-                        <div class="row">
-                            <div class="col my-auto">
-                                <div class="d-flex flex-column">
-                                    <span class="fa-solid fa-bus-simple fs-5"></span>
-                                    <span>Jeep</span>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="d-flex flex-column">
-                                    <span>Regular</span>
-                                    <span>PHP ${jeepFareRegular}</span>
-                                </div>
-                            </div>
-                            <div class="col">
+    }
+    if(nearestOriginJeepCoordinates && nearestDestinationJeepCoordinates){
+            travelsSection.innerHTML += `
+            <form class="travels-form" method="GET" id="myForm">
+                <input type="hidden" name="jeepOriginLat" id="jeepOriginLat" value="${originLatLng.lat}">
+                <input type="hidden" name="jeepOriginLng" id="jeepOriginLng" value="${originLatLng.lng}">
+                <input type="hidden" name="jeepDestinationLat" id="jeepDestinationLat" value="${destinationLatLng.lat}">
+                <input type="hidden" name="jeepDestinationLng" id="jeepDestinationLng" value="${destinationLatLng.lng}">
+                <input type="hidden" name="vehicleType" id="busDestination" value="Jeep">
+                <button type="submit" class="form-control my-3 py-3">
+                    <div class="row">
+                        <div class="col my-auto">
                             <div class="d-flex flex-column">
-                                    <span>Discounted</span>
-                                    <span>PHP ${jeepFareDiscount}</span>
-                                </div>
+                                <span class="fa-solid fa-bus-simple fs-5"></span>
+                                <span>Jeep</span>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col">
-                                <span>Distance: ${jeepDistance} km</span>
-                            </div>
-                            <div class="col">
-                                <span>ETA: ${jeepETA} m</span>
+                        <div class="col">
+                            <div class="d-flex flex-column">
+                                <span>Regular</span>
+                                <span>PHP ${jeepFareRegular}</span>
                             </div>
                         </div>
-                    </button>
-                </form>
-                `;
-        }
-
-        if (!nearestOriginBusCoordinates && !nearestDestinationBusCoordinates && !nearestOriginJeepCoordinates && !nearestDestinationJeepCoordinates) {
-        var travelsSection = document.querySelector('.travels-form');
-        travelsSection.innerHTML += `
-            <p>No found Route Path.</p>
-        `;
-        }
+                        <div class="col">
+                        <div class="d-flex flex-column">
+                                <span>Discounted</span>
+                                <span>PHP ${jeepFareDiscount}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col">
+                            <span>Distance: ${jeepDistance} km</span>
+                        </div>
+                        <div class="col">
+                            <span>ETA: ${jeepETA} m</span>
+                        </div>
+                    </div>
+                </button>
+            </form>
+            `;
     }
 
-    </script>
-    <script>
-         function storeBusPath(nearestOriginBusCoordinates, nearestDestinationBusCoordinates){
+    if (!nearestOriginBusCoordinates && !nearestDestinationBusCoordinates && !nearestOriginJeepCoordinates && !nearestDestinationJeepCoordinates) {
+    var travelsSection = document.querySelector('.travels-form');
+    travelsSection.innerHTML += `
+        <p>No found Route Path.</p>
+    `;
+    }
+}
+
+var myForm = document.getElementById('myForm');
+if (myForm) {
+    myForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+    });
+}
+
+function geocodeDestination() {
+    var destinationInput = document.getElementById('destination').value;
+
+    if (destinationInput.trim() !== '') {
+        // Make a request to Nominatim API for geocoding
+        fetch(`https://nominatim.openstreetmap.org/search?q=${destinationInput}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    var destinationCoordinates = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+                    map.setView(destinationCoordinates, 15);
+                    if (destinationMarker) {
+                        map.removeLayer(destinationMarker);
+                        map.removeLayer(destinationCircle);
+                    }
+
+                    destinationMarker = L.marker(destinationCoordinates, {
+                        icon: L.icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                        })
+                    }).addTo(map);
+                    destinationCircle = L.circle(destinationCoordinates, {
+                        color: 'red',
+                        fillColor: 'red',
+                        fillOpacity: 0.5,
+                        radius: 20
+                    }).addTo(map);
+
+                    destinationMarker.bindPopup('Your destination.').openPopup();
+
+                } else {
+                    alert('Destination not found. Please enter a valid address.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching geocoding data:', error);
+            });
+    } else {
+        alert('Please enter a destination address.');
+    }
+}
+
+function removePolyline(polyline) {
+    if (polyline) {
+        map.removeLayer(polyline); // Remove the previously drawn polyline
+        polyline = null; // Reset the reference to null
+    }
+}
+function geocodeOrigin(numPassenger) {
+    var originInput = document.getElementById('origin').value;
+    removePolyline();
+
+    if (originInput.trim() !== '') {
+        // Make a request to Nominatim API for geocoding
+        fetch(`https://nominatim.openstreetmap.org/search?q=${originInput}&format=json`)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.length > 0) {
+                    var originCoordinates = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+
+                    if (originMarker) {
+                        map.removeLayer(originMarker);
+                        map.removeLayer(originCircle);
+                    }
+
+                    if (polyline) {
+                        removePolyline();
+                    }
+                    originMarker = L.marker(originCoordinates).addTo(map);
+                    originCircle = L.circle(originCoordinates, {
+                        color: '#20A2AA',
+                        fillColor: '#20A2AA',
+                        fillOpacity: 0.5,
+                        radius: 20
+                    }).addTo(map);
+
+                    originMarker.bindPopup('Your origin.').openPopup();
+                    var originLatLng = originMarker.getLatLng();
+                    var destinationLatLng = destinationMarker.getLatLng();
+                    defineMarker(originLatLng, destinationLatLng, numPassenger);
+                   // drawPolyline(originMarker, destinationMarker);
+                  
+                } else {
+                    alert('Origin not found');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching geocoding data:', error);
+            });
+    } else {
+        alert('Please enter an origin destination address.');
+    }
+}
+
+</script>
+
+<script>
+// functions
+
+function storeBusPath(nearestOriginBusCoordinates, nearestDestinationBusCoordinates){
     var busRoutes = <?php echo json_encode($busRoutes); ?>;
     var busRoutePathCoordinates = [];
 
@@ -432,6 +964,56 @@ function storeJeepPath(nearestOriginJeepCoordinates, nearestDestinationJeepCoord
     }
 
     return jeepRoutePathCoordinates;
+}
+
+function computeDistance(busRoutePathCoordinates){
+    var totalBusDistance = 0;
+    for (var l = 0; l < busRoutePathCoordinates.length -1 ; l++) {
+                var firstroute = busRoutePathCoordinates[l];
+                var nextroute = busRoutePathCoordinates[l + 1];
+                        
+                var distance = L.latLng(firstroute[0], firstroute[1]).distanceTo(L.latLng(nextroute[0], nextroute[1]));
+
+                totalBusDistance += distance;
+            }
+
+        var totalKm = (totalBusDistance / 1000).toFixed(2);
+    return parseFloat(totalKm);
+
+}
+
+function computeJeepDistance(jeepRoutePathCoordinates){
+    var totalJeepDistance = 0;
+    for (var l = 0; l < jeepRoutePathCoordinates.length -1 ; l++) {
+                var firstroute = jeepRoutePathCoordinates[l];
+                var nextroute = jeepRoutePathCoordinates[l + 1];
+                        
+                var distance = L.latLng(firstroute[0], firstroute[1]).distanceTo(L.latLng(nextroute[0], nextroute[1]));
+
+                totalJeepDistance += distance;
+            }
+
+        var totalKm = (totalJeepDistance / 1000).toFixed(2);
+    return parseFloat(totalKm);
+}
+
+function computeETA(busDistance){
+    var averageSpeedKph = 23; 
+    var travelTimeHours = busDistance / averageSpeedKph;
+    var travelTimeMinutes = travelTimeHours * 60;
+    var etaMinutes = Math.round(travelTimeMinutes);
+    console.log("ETA: " + etaMinutes + "m");
+
+    return etaMinutes;
+}
+function computeJeepETA(jeepDistance){
+    var averageSpeedKph = 21; 
+    var travelTimeHours = jeepDistance / averageSpeedKph;
+    var travelTimeMinutes = travelTimeHours * 60;
+    var etaMinutes = Math.round(travelTimeMinutes);
+    console.log("ETA: " + etaMinutes + "m");
+
+    return etaMinutes;
 }
 
 function computeRegularBusFare(busDistance, pass){
@@ -507,5 +1089,47 @@ function computeDiscountJeepFare(jeepDistance, pass){
 
     return totaldiscountFarepass;
 }
-    </script>
+
+function findNearestJeepCoordinates(targetLatLng, jRoutes){
+
+    var nearestDistance = Number.MAX_VALUE;
+    var nearestCoordinate = null;
+    var nearestIndex = -1;
+    
+    for (var i = 1; i < jRoutes.length; i++) {
+        var route = jRoutes[i];
+        var routeLatLng = L.latLng(route.latitude, route.longitude); // Create LatLng object properly
+        var distance = targetLatLng.distanceTo(routeLatLng);
+        
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestCoordinate = route;
+            nearestIndex = i;
+        }
+    }
+    return { latitude: nearestCoordinate.latitude, longitude: nearestCoordinate.longitude};
+}
+
+function findNearestBusCoordinates(targetLatLng, bRoutes){
+    
+    var nearestDistance = Number.MAX_VALUE;
+    var nearestCoordinate = null;
+    var nearestIndex = -1;
+    
+    for (var i = 1; i < bRoutes.length; i++) {
+        var route = bRoutes[i];
+        var routeLatLng = L.latLng(route.latitude, route.longitude); // Create LatLng object properly
+        var distance = targetLatLng.distanceTo(routeLatLng);
+        
+        if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestCoordinate = route;
+            nearestIndex = i;
+        }
+    }
+    return { latitude: nearestCoordinate.latitude, longitude: nearestCoordinate.longitude};
+}
+
+
+</script>
 </html>

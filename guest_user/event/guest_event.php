@@ -173,7 +173,7 @@
                         </div>
 
                         <div class="mt-5 mb-3">
-                            <form class="col-12"  method="GET" action="../home/guest_home_2.php">
+                            <form class="col-12"  method="GET" action="../home/guest_home.php">
                                 <input type="hidden" name="view" value="<?php echo $evtid ?>">
                                 <input type="hidden" name="latitude" value="<?php echo $evtlatitude ?>">
                                 <input type="hidden" name="longitude" value="<?php echo $evtlongitude ?>">
